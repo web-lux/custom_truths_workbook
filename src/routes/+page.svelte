@@ -10,9 +10,32 @@
 	function saveAsJSON() {
 		const data = `data:text/json;charset=utf-8, ${JSON.stringify(truth)}`;
 		const link = document.createElement('a');
-		link.download = `customtruth.json`;
+		link.download = `${truth.title.trim()}.json`;
 		link.href = data;
 		link.click();
+	}
+
+	function loadJSON() {
+		const input = document.createElement('input');
+		input.type = 'file';
+		input.accept = 'application/JSON';
+		input.onchange = (e: any) => {
+			const file = e.target.files[0];
+
+			if (file) {
+				const reader = new FileReader();
+				reader.readAsText(file);
+
+				reader.onload = (e) => {
+					if (e.target?.result) {
+						const loadedTruthRaw = e.target.result as string;
+						const loadedTruth = JSON.parse(loadedTruthRaw);
+						Object.assign(truth, loadedTruth);
+					}
+				};
+			}
+		};
+		input.click();
 	}
 
 	function printPage() {
@@ -24,6 +47,7 @@
 	<div class="settings">
 		<div class="main-btn">
 			<button onclick={saveAsJSON}>Save as JSON</button>
+			<button onclick={loadJSON}>Load JSON</button>
 			<button onclick={printPage}>Print / Save as PDF</button>
 		</div>
 		<TemplateButtons />
