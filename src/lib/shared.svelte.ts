@@ -55,7 +55,7 @@ const options: OptionI[] = [
 	}
 ];
 
-export const truth: TruthI = $state({
+const placeholderTruth = {
 	title: '2. Exodus',
 	characterBackground:
 		'Does your family or cultural history offer any stories of the Exodus? How does this legacy impact you today? If you are dedicated to expanding the reach of your people within the Forge, you might be an EXPLORER. If you are exiled or reviled, you might be an OUTCAST.',
@@ -65,4 +65,6 @@ export const truth: TruthI = $state({
 		notes: true
 	},
 	template: 2
-});
+};
+
+export const truth: TruthI = $state(placeholderTruth);

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { truth } from '$lib/shared.svelte';
 	import Option from '$lib/components/Option.svelte';
 	import Custom from '$lib/components/Custom.svelte';
@@ -6,6 +7,21 @@
 	import Visibility from '$lib/components/Visibility.svelte';
 
 	let currentTemplate = $derived(`template-${truth.template}`);
+
+	onMount(() => {
+		const rawStoredTruth = localStorage.getItem('truthJSON');
+
+		if (rawStoredTruth) {
+			const storedTruth = JSON.parse(rawStoredTruth);
+			Object.assign(truth, storedTruth);
+		}
+	});
+
+	$effect(() => {
+		window.addEventListener('beforeunload', () => {
+			localStorage.setItem('truthJSON', JSON.stringify($state.snapshot(truth)));
+		});
+	});
 
 	function saveAsJSON() {
 		const data = `data:text/json;charset=utf-8, ${JSON.stringify(truth)}`;
